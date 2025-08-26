@@ -15,14 +15,14 @@ workflows:
       - name: Build iOS app
         script: |
           npx react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle --assets-dest ios
-          xcodebuild -workspace ios/YourApp.xcworkspace \
-            -scheme YourApp \
+          xcodebuild -workspace ios/clearpass.xcworkspace \
+            -scheme clearpass \
             -configuration Release \
             -sdk iphoneos \
-            -archivePath $CM_BUILD_DIR/YourApp.xcarchive archive
+            -archivePath $CM_BUILD_DIR/clearpass.xcarchive archive
 
           xcodebuild -exportArchive \
-            -archivePath $CM_BUILD_DIR/YourApp.xcarchive \
+            -archivePath $CM_BUILD_DIR/clearpass.xcarchive \
             -exportOptionsPlist ios/exportOptions.plist \
             -exportPath $CM_BUILD_DIR/ipa
     artifacts:
