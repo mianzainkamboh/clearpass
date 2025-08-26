@@ -1,0 +1,33 @@
+workflows:
+  react-native-ios:
+    name: React Native iOS Build
+    max_build_duration: 60
+    environment:
+      node: latest
+      xcode: latest
+      cocoapods: default
+      npm: latest
+    scripts:
+      - name: Install dependencies
+        script: |
+          npm install
+          cd ios && pod install && cd ..
+      - name: Build iOS app
+        script: |
+          npx react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle --assets-dest ios
+          xcodebuild -workspace ios/YourApp.xcworkspace \
+            -scheme YourApp \
+            -configuration Release \
+            -sdk iphoneos \
+            -archivePath $CM_BUILD_DIR/YourApp.xcarchive archive
+
+          xcodebuild -exportArchive \
+            -archivePath $CM_BUILD_DIR/YourApp.xcarchive \
+            -exportOptionsPlist ios/exportOptions.plist \
+            -exportPath $CM_BUILD_DIR/ipa
+    artifacts:
+      - $CM_BUILD_DIR/ipa/*.ipa
+    publishing:
+      email:
+        recipients:
+          - zain.kamboh003@email.com
